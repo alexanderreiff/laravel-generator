@@ -17,8 +17,7 @@ class APIControllerGenerator
     public function __construct($commandData)
     {
         $this->commandData = $commandData;
-        $this->path = config('infyom.laravel_generator.path.api_controller', app_path('Http/Controllers/API/')
-        );
+        $this->path = config('infyom.laravel_generator.path.api_controller', app_path('Http/Controllers/API/'));
     }
 
     public function generate()
@@ -31,6 +30,8 @@ class APIControllerGenerator
         $fileName = $this->commandData->modelName.'APIController.php';
 
         FileUtil::createFile($this->path, $fileName, $templateData);
+        
+        $this->generateBaseController();
 
         $this->commandData->commandComment("\nAPI Controller created: ");
         $this->commandData->commandInfo($fileName);
@@ -56,5 +57,19 @@ class APIControllerGenerator
         }
 
         return $templateData;
+    }
+    
+    private function generateBaseController()
+    {
+        
+        $fileName = 'APIBaseController.php';
+        
+        if (!file_exists($this->path . $fileName)) {
+            $templateData = TemplateUtil::getTemplate('api.controller.api_base_controller', 'laravel-generator');
+
+            $templateData = TemplateUtil::fillTemplate($this->commandData->dynamicVars, $templateData);
+        
+            FileUtil::createFile($this->path, $fileName, $templateData);
+        }
     }
 }

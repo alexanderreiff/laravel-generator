@@ -103,6 +103,11 @@ class BaseCommand extends Command
             '$NAMESPACE_API_REQUEST$',
             config('infyom.laravel_generator.namespace.api_request', 'App\Http\Requests\API')
         );
+
+        $this->commandData->addDynamicVariable(
+            '$NAMESPACE_CONTROLLER$',
+            config('infyom.laravel_generator.namespace.controller', 'App\Http\Controllers')
+        );
     }
 
     public function initScaffoldGeneratorCommandData()

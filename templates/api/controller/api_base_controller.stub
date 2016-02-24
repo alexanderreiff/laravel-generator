@@ -1,0 +1,15 @@
+<?php
+
+namespace $NAMESPACE_API_CONTROLLER$;
+
+use $NAMESPACE_CONTROLLER$\Controller as Controller;
+use InfyOm\Generator\Utils\ResponseUtil;
+use Response;
+
+abstract class APIBaseController extends Controller
+{
+    public function sendResponse($result, $message)
+    {
+        return Response::json(ResponseUtil::makeResponse($message, $result));
+    }
+}
