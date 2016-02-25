@@ -15,7 +15,7 @@ class $MODEL_NAME$ApiTest extends TestCase
         $$MODEL_NAME_CAMEL$ = $this->fake$MODEL_NAME$Data();
         $this->json('POST', "/api/v1/$MODEL_NAME_PLURAL_CAMEL$", $$MODEL_NAME_CAMEL$);
 
-        $this->assertApiResponse($$MODEL_NAME_CAMEL$);
+        $this->assertApiResponse($$MODEL_NAME_CAMEL$, '$MODEL_PRIMARY_KEY$');
     }
 
     /**
@@ -24,9 +24,9 @@ class $MODEL_NAME$ApiTest extends TestCase
     function it_can_read_$MODEL_NAME_SNAKE$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json("GET", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->id}");
+        $this->json("GET", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->$MODEL_PRIMARY_KEY$}");
 
-        $this->assertApiResponse($$MODEL_NAME_CAMEL$->toArray());
+        $this->assertApiResponse($$MODEL_NAME_CAMEL$->toArray(), '$MODEL_PRIMARY_KEY$');
     }
 
     /**
@@ -37,9 +37,9 @@ class $MODEL_NAME$ApiTest extends TestCase
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
         $edited$MODEL_NAME$ = $this->fake$MODEL_NAME$Data();
 
-        $this->json('PUT', "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->id}", $edited$MODEL_NAME$);
+        $this->json('PUT', "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->$MODEL_PRIMARY_KEY$}", $edited$MODEL_NAME$);
 
-        $this->assertApiResponse($edited$MODEL_NAME$);
+        $this->assertApiResponse($edited$MODEL_NAME$, '$MODEL_PRIMARY_KEY$');
     }
 
     /**
@@ -48,10 +48,10 @@ class $MODEL_NAME$ApiTest extends TestCase
     function it_can_delete_$MODEL_NAME_PLURAL_SNAKE$()
     {
         $$MODEL_NAME_CAMEL$ = $this->make$MODEL_NAME$();
-        $this->json("DELETE", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->id}");
+        $this->json("DELETE", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->$MODEL_PRIMARY_KEY$}");
 
         $this->assertApiSuccess();
-        $this->json("GET", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->id}");
+        $this->json("GET", "/api/v1/$MODEL_NAME_PLURAL_CAMEL$/{$$MODEL_NAME_CAMEL$->$MODEL_PRIMARY_KEY$}");
 
         $this->assertResponseStatus(404);
     }

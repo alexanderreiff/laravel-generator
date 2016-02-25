@@ -231,8 +231,10 @@ class CommandData
     {
         if ($this->options['primary']) {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput($this->options['primary'].':increments', '', '', false, false, true);
+            $this->addDynamicVariable('$MODEL_PRIMARY_KEY$', $this->options['primary']);
         } else {
             $this->inputFields[] = GeneratorFieldsInputUtil::processFieldInput('id:increments', '', '', false, false, true);
+            $this->addDynamicVariable('$MODEL_PRIMARY_KEY$', 'id');
         }
     }
 
@@ -275,6 +277,8 @@ class CommandData
                 break;
             }
         }
+        
+        $this->addDynamicVariable('$MODEL_PRIMARY_KEY$', !empty($this->options['primary']) ? $this->options['primary'] : 'id');
     }
 
     private function getInputFromTable()
@@ -283,5 +287,16 @@ class CommandData
 
         $this->inputFields = TableFieldsGenerator::generateFieldsFromTable($tableName);
         $this->checkForDiffPrimaryKey();
+    }
+    
+    public function getTimestamps()
+    {
+        if ($this->options['fromTable']) {
+            return TableFieldsGenerator::getTimestampFieldNames();
+        } elseif ($this->options['fieldsFile']) {
+            return [];
+        }
+        
+        return ['created_at', 'updated_at'];
     }
 }

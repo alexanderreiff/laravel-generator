@@ -49,6 +49,13 @@ class TestTraitGenerator
         $fields = [];
 
         foreach ($this->commandData->inputFields as $field) {
+            
+            $doNotFake = array_merge([$this->commandData->getOption('primary')], $this->commandData->getTimestamps());
+            
+            if (in_array($field['fieldName'], $doNotFake)) {
+                continue;
+            }
+            
             $fieldData = "'".$field['fieldName']."' => ".'$fake->';
 
             switch ($field['fieldType']) {
@@ -62,11 +69,15 @@ class TestTraitGenerator
                 case 'text':
                     $fakerData = 'text';
                     break;
-                case 'datetime':
+                case 'dateTime':
+                case 'dateTimeTz':                
                     $fakerData = "date('Y-m-d H:i:s')";
                     break;
                 case 'enum':
                     $fakerData = 'randomElement('.GeneratorFieldsInputUtil::prepareValuesArrayStr(explode(',', $field['htmlTypeInputs'])).')';
+                    break;
+                case 'boolean':
+                    $fakerData = 'numberBetween(0, 1)';
                     break;
                 default:
                     $fakerData = 'word';

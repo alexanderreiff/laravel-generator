@@ -2,14 +2,14 @@
 
 trait ApiTestTrait
 {
-    public function assertApiResponse(Array $actualData)
+    public function assertApiResponse(Array $actualData, $primaryKey = 'id')
     {
         $this->assertApiSuccess();
 
         $response = json_decode($this->response->getContent(), true);
         $responseData = $response['data'];
 
-        $this->assertNotEmpty($responseData['id']);
+        $this->assertNotEmpty($responseData[$primaryKey]);
         $this->assertModelData($actualData, $responseData);
     }
 
